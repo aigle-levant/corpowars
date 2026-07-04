@@ -1,6 +1,6 @@
-
+"use client";
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 
 type DitheringMode = "bayer" | "halftone" | "noise" | "crosshatch";
 type ColorMode = "original" | "grayscale" | "duotone" | "custom";
@@ -457,4 +457,4 @@ export const DitherShader: React.FC<DitherShaderProps> = ({
   );
 };
 
-export DitherShader;
+export default DitherShader;
