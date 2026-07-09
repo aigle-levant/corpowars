@@ -20,6 +20,7 @@ import Link from 'next/link'
 export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [username, setUsername] = useState("")
   const [repeatPassword, setRepeatPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -33,8 +34,32 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
 
     if (password !== repeatPassword) {
       setError('Passwords do not match')
-      setIsLoading(false)
-      return
+      setIsLoading(false);
+      return;
+    }
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("username", username)
+      .maybeSingle();
+
+    if (data) {
+      setError("Username is already taken.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (username.length < 3) {
+      setError("Username must be at least 3 characters.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      setError("Username can only contain letters, numbers, and underscores.");
+      setIsLoading(false);
+      return;
     }
 
     try {
@@ -42,9 +67,12 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         email,
         password,
         options: {
+          data: {
+            username,
+          },
           emailRedirectTo: `${window.location.origin}/protected`,
         },
-      })
+      });
       if (error) throw error
       router.push('/auth/sign-up-success')
     } catch (error: unknown) {
@@ -55,7 +83,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
   }
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Sign up</CardTitle>
@@ -63,6 +91,17 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
+            <div className="grid gap-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="Type your username here"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -101,11 +140,11 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating an account...' : 'Sign up'}
+                {isLoading ? "Creating an account..." : "Sign up"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link href="/auth/login" className="underline underline-offset-4">
                 Login
               </Link>
@@ -114,5 +153,5 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,0 +1,47 @@
+// market shifts every fortnight [14 days]
+export const FORTNIGHT = 1000 * 60 * 60 * 24 * 14;
+
+export enum MarketType {
+  // General market cycles
+  BULL = "BULL",
+  BEAR = "BEAR",
+  RECOVERY = "RECOVERY",
+  RECESSION = "RECESSION",
+
+  // Technology trends
+  AI_BOOM = "AI_BOOM",
+  CLOUD_EXPANSION = "CLOUD_EXPANSION",
+  CHIP_SHORTAGE = "CHIP_SHORTAGE",
+  OPEN_SOURCE_REVOLUTION = "OPEN_SOURCE_REVOLUTION",
+
+  // Economy
+  RATE_HIKE = "RATE_HIKE",
+  RATE_CUT = "RATE_CUT",
+  HIGH_INFLATION = "HIGH_INFLATION",
+  LOW_INFLATION = "LOW_INFLATION",
+
+  // Government / Regulation
+  ANTITRUST = "ANTITRUST",
+  PRIVACY_REGULATION = "PRIVACY_REGULATION",
+  TAX_REFORM = "TAX_REFORM",
+
+  // World Events
+  PANDEMIC = "PANDEMIC",
+  SUPPLY_CHAIN_CRISIS = "SUPPLY_CHAIN_CRISIS",
+  TRADE_WAR = "TRADE_WAR",
+  CYBER_ATTACK = "CYBER_ATTACK",
+
+  // Consumer Trends
+  STREAMING_WARS = "STREAMING_WARS",
+  ECOMMERCE_SURGE = "ECOMMERCE_SURGE",
+  EV_ADOPTION = "EV_ADOPTION",
+  CRYPTO_BOOM = "CRYPTO_BOOM",
+  CRYPTO_CRASH = "CRYPTO_CRASH",
+}
+
+export enum MarketEventRarity {
+  COMMON = "COMMON",
+  UNCOMMON = "UNCOMMON",
+  RARE = "RARE",
+  LEGENDARY = "LEGENDARY",
+}

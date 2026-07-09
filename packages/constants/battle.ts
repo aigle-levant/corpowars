@@ -1,0 +1,263 @@
+
+
+// phases in a battle [from the pov of a company]
+export enum BattlePhase {
+  WAITING = "WAITING",
+  TURN_START = "TURN_START",
+  ACTION_SELECTION = "ACTION_SELECTION",
+  ACTION_RESOLUTION = "ACTION_RESOLUTION",
+  STATUS_RESOLUTION = "STATUS_RESOLUTION",
+  MARKET_RESOLUTION = "MARKET_RESOLUTION",
+  TURN_END = "TURN_END",
+  FINISHED = "FINISHED",
+}
+
+// phases in a battle [from the pov of the game engine]
+export enum BattleStatus {
+  WAITING = "WAITING",
+  ACTIVE = "ACTIVE",
+  PAUSED = "PAUSED",
+  ENDED = "ENDED",
+  ABANDONED = "ABANDONED",
+}
+
+
+export enum BattleEventType {
+  BATTLE_STARTED = "BATTLE_STARTED",
+
+  TURN_STARTED = "TURN_STARTED",
+
+  TURN_ENDED = "TURN_ENDED",
+
+  MOVE_USED = "MOVE_USED",
+
+  DAMAGE_DEALT = "DAMAGE_DEALT",
+
+  HEAL_APPLIED = "HEAL_APPLIED",
+
+  SHIELD_GAINED = "SHIELD_GAINED",
+
+  RESOURCE_GAINED = "RESOURCE_GAINED",
+
+  RESOURCE_SPENT = "RESOURCE_SPENT",
+
+  STATUS_APPLIED = "STATUS_APPLIED",
+
+  STATUS_REMOVED = "STATUS_REMOVED",
+
+  PASSIVE_TRIGGERED = "PASSIVE_TRIGGERED",
+
+  CRITICAL_HIT = "CRITICAL_HIT",
+
+  DODGED = "DODGED",
+
+  COMPANY_SWITCHED = "COMPANY_SWITCHED",
+
+  MARKET_CHANGED = "MARKET_CHANGED",
+
+  PLAYER_DEFEATED = "PLAYER_DEFEATED",
+
+  BATTLE_ENDED = "BATTLE_ENDED",
+}
+
+/* ===========================
+   Moves
+=========================== */
+
+export enum MoveCategory {
+  ATTACK = "ATTACK",
+
+  BUFF = "BUFF",
+
+  DEBUFF = "DEBUFF",
+
+  RESOURCE = "RESOURCE",
+
+  DEFENSIVE = "DEFENSIVE",
+
+  ULTIMATE = "ULTIMATE",
+
+  SPECIAL = "SPECIAL",
+}
+
+/* ===========================
+   Targets
+=========================== */
+
+export enum TargetType {
+  SELF = "SELF",
+
+  ENEMY = "ENEMY",
+
+  ALLY = "ALLY",
+
+  ALL_ENEMIES = "ALL_ENEMIES",
+
+  ALL_ALLIES = "ALL_ALLIES",
+
+  EVERYONE = "EVERYONE",
+
+  RANDOM_ENEMY = "RANDOM_ENEMY",
+
+  RANDOM_ALLY = "RANDOM_ALLY",
+
+  MARKET = "MARKET",
+}
+
+/* ===========================
+   Requirements
+=========================== */
+
+export enum RequirementType {
+  MIN_HP = "MIN_HP",
+
+  MAX_HP = "MAX_HP",
+
+  MIN_RESOURCE = "MIN_RESOURCE",
+
+  MAX_RESOURCE = "MAX_RESOURCE",
+
+  HAS_STATUS = "HAS_STATUS",
+
+  MISSING_STATUS = "MISSING_STATUS",
+
+  MARKET_STATE = "MARKET_STATE",
+
+  TURN_NUMBER = "TURN_NUMBER",
+
+  COOLDOWN_READY = "COOLDOWN_READY",
+
+  CUSTOM = "CUSTOM",
+}
+
+/* ===========================
+   Triggers
+=========================== */
+
+export enum TriggerType {
+  TURN_START = "TURN_START",
+
+  TURN_END = "TURN_END",
+
+  BEFORE_ATTACK = "BEFORE_ATTACK",
+
+  AFTER_ATTACK = "AFTER_ATTACK",
+
+  BEFORE_DAMAGE = "BEFORE_DAMAGE",
+
+  AFTER_DAMAGE = "AFTER_DAMAGE",
+
+  BEFORE_HEAL = "BEFORE_HEAL",
+
+  AFTER_HEAL = "AFTER_HEAL",
+
+  BEFORE_STATUS = "BEFORE_STATUS",
+
+  AFTER_STATUS = "AFTER_STATUS",
+
+  BEFORE_MOVE = "BEFORE_MOVE",
+
+  AFTER_MOVE = "AFTER_MOVE",
+
+  ON_CRITICAL = "ON_CRITICAL",
+
+  ON_DODGE = "ON_DODGE",
+
+  ON_SWITCH = "ON_SWITCH",
+
+  ON_DEATH = "ON_DEATH",
+
+  ON_REVIVE = "ON_REVIVE",
+
+  ON_RESOURCE_GAIN = "ON_RESOURCE_GAIN",
+
+  ON_RESOURCE_SPEND = "ON_RESOURCE_SPEND",
+
+  MARKET_CHANGED = "MARKET_CHANGED",
+}
+
+/* ===========================
+   Effects
+=========================== */
+
+export enum EffectType {
+  DAMAGE = "DAMAGE",
+
+  HEAL = "HEAL",
+
+  SHIELD = "SHIELD",
+
+  APPLY_STATUS = "APPLY_STATUS",
+
+  REMOVE_STATUS = "REMOVE_STATUS",
+
+  MODIFY_STAT = "MODIFY_STAT",
+
+  GAIN_RESOURCE = "GAIN_RESOURCE",
+
+  SPEND_RESOURCE = "SPEND_RESOURCE",
+
+  MODIFY_COOLDOWN = "MODIFY_COOLDOWN",
+
+  MODIFY_COST = "MODIFY_COST",
+
+  DRAW_CARD = "DRAW_CARD",
+
+  STEAL_RESOURCE = "STEAL_RESOURCE",
+
+  COPY_MOVE = "COPY_MOVE",
+
+  SWITCH_COMPANY = "SWITCH_COMPANY",
+
+  REVIVE = "REVIVE",
+
+  SKIP_TURN = "SKIP_TURN",
+
+  DISPEL = "DISPEL",
+
+  MARKET_SHIFT = "MARKET_SHIFT",
+
+  CUSTOM = "CUSTOM",
+}
+
+/* ===========================
+   Resources
+=========================== */
+
+export enum ResourceType {
+  CASH = "CASH",
+
+  REPUTATION = "REPUTATION",
+
+  INNOVATION = "INNOVATION",
+
+  DATA = "DATA",
+
+  TALENT = "TALENT",
+
+  COMPUTE = "COMPUTE",
+}
+
+/* ===========================
+   Stats
+=========================== */
+
+export enum StatType {
+  ATTACK = "ATTACK",
+
+  DEFENSE = "DEFENSE",
+
+  SPECIAL_ATTACK = "SPECIAL_ATTACK",
+
+  SPECIAL_DEFENSE = "SPECIAL_DEFENSE",
+
+  SPEED = "SPEED",
+
+  ACCURACY = "ACCURACY",
+
+  EVASION = "EVASION",
+
+  CRITICAL_CHANCE = "CRITICAL_CHANCE",
+
+  CRITICAL_DAMAGE = "CRITICAL_DAMAGE",
+}

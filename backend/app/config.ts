@@ -5,7 +5,7 @@ import * as z from "zod";
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   SUPABASE_URL: z.string().url(),
-  SUPABASE_KEY: z.string().min(1),
+  SUPABASE_SERVICE_KEY: z.string().min(1),
 });
 
 export const env = envSchema.parse(process.env);
