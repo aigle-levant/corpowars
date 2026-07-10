@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { createClient } from '@/lib/client'
 import { api } from "@/lib/api";
 import { ProfileCard, type PlayerProfile } from "./profile-card";
 import { CurrentTeam } from "./current-team";
@@ -11,19 +11,34 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadProfile() {
-      try {
-        const data = await api<PlayerProfile>("/player/me");
-        setProfile(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }
+  async function loadProfile() {
+    try {
+      const supabase = createClient();
 
-    loadProfile();
-  }, []);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) throw new Error("Not authenticated");
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (error) throw error;
+
+      setProfile(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  loadProfile();
+}, []);
 
   if (loading) {
     return (

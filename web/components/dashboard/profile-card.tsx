@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface PlayerProfile {
   id: string;
@@ -10,41 +12,113 @@ export interface PlayerProfile {
   rating: number;
   wins: number;
   losses: number;
+  avatarUrl?: string;
 }
 
 interface ProfileCardProps {
   profile: PlayerProfile;
 }
 
+function getRank(rating: number) {
+  if (rating >= 3000) {
+    return {
+      title: "Legendary CEO",
+      color: "text-red-500",
+    };
+  }
+
+  if (rating >= 2400) {
+    return {
+      title: "Corporate Master",
+      color: "text-orange-500",
+    };
+  }
+
+  if (rating >= 1800) {
+    return {
+      title: "Senior Manager",
+      color: "text-violet-500",
+    };
+  }
+
+  if (rating >= 1400) {
+    return {
+      title: "Manager",
+      color: "text-blue-500",
+    };
+  }
+
+  return {
+    title: "Intern",
+    color: "text-muted-foreground",
+  };
+}
+
 export function ProfileCard({ profile }: ProfileCardProps) {
+  const rank = getRank(profile.rating);
+
   return (
-    <Card className="mx-auto w-full max-w-2xl">
-      <CardHeader className="items-center text-center">
+    <Card className="overflow-hidden">
+      <CardContent className="p-8">
+        <div className="grid gap-10 lg:grid-cols-[1fr_320px]">
+          {/* Left */}
+          <div>
+            <p className={`font-display text-2xl ${rank.color}`}>
+              {rank.title}
+            </p>
 
-        <CardTitle className="mt-4 text-2xl">{profile.username}</CardTitle>
+            <h1 className="font-display mt-2 text-5xl tracking-tight">
+              {profile.username}
+            </h1>
 
-        <p className="text-muted-foreground">{profile.email}</p>
-      </CardHeader>
+            <p className="font-body mt-2 text-muted-foreground">
+              {profile.email}
+            </p>
 
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="rounded-lg border p-4 text-center">
-            <p className="text-muted-foreground text-sm">Rating</p>
-            <p className="text-2xl font-bold">{profile.rating}</p>
+            <div className="mt-10 space-y-7 font-body">
+              <div className="flex items-center gap-4">
+                <div>
+                  <span className="text-muted-foreground">Rating:</span>{" "}
+                  <span className="font-body">{profile.rating}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div>
+                  <span className="text-muted-foreground">Wins:</span>{" "}
+                  <span className="font-body">{profile.wins}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div>
+                  <span className="text-muted-foreground">Losses:</span>{" "}
+                  <span className="font-body">{profile.losses}</span>
+                </div>
+              </div>
+            </div>
+
+            <Button
+              variant="link"
+              className="font-body mt-10 px-0 font-body text-base"
+            >
+              Edit Profile
+            </Button>
           </div>
 
-          <div className="rounded-lg border p-4 text-center">
-            <p className="text-muted-foreground text-sm">Wins</p>
-            <p className="text-2xl font-bold">{profile.wins}</p>
-          </div>
-
-          <div className="rounded-lg border p-4 text-center">
-            <p className="text-muted-foreground text-sm">Losses</p>
-            <p className="text-2xl font-bold">{profile.losses}</p>
+          {/* Right */}
+          <div className="flex justify-center lg:justify-end">
+            <div className="overflow-hidden rounded-md border bg-muted">
+              <Image
+                src={profile.avatarUrl ?? "/default-avatar.png"}
+                alt={profile.username}
+                width={320}
+                height={320}
+                className="aspect-square object-cover"
+              />
+            </div>
           </div>
         </div>
-
-        <Button className="w-full">Edit Profile</Button>
       </CardContent>
     </Card>
   );

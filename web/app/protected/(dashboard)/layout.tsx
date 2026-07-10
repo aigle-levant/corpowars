@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/server";
+import SidebarLayout from "@/components/dashboard/sidebar-block";
 
 export const metadata: Metadata = {
   title: "Profile | CorpoWars",
@@ -14,16 +15,18 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
     redirect("/auth/login");
   }
-
   return (
-      <div className="flex min-h-screen flex-col">
-        <main className="flex-1">
-          <div className="mx-auto w-full max-w-6xl px-6 py-8">{children}</div>
-        </main>
-      </div>
+      <SidebarLayout>
+          {children}
+      </SidebarLayout>
   );
 }

@@ -1,3 +1,4 @@
+export const TEAM_SIZE = 4;
 /*
 what does this file do: store all
 */
