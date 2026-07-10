@@ -105,9 +105,9 @@ export default function BuilderState() {
                   className="h-auto w-full justify-between p-4"
                 >
                   <div className="text-left">
-                    <p className="font-semibold">{company.name}</p>
+                    <p className="font-display text-lg">{company.name}</p>
 
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-s text-muted-foreground">
                       {company.ticker} • {company.sector}
                     </p>
 

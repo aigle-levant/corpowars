@@ -1,3 +1,13 @@
+export interface CompanyStats {
+  capital: number;
+  innovation: number;
+  influence: number;
+  trust: number;
+  marketShare: number;
+  resilience: number;
+  execution: number;
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -6,13 +16,5 @@ export interface Company {
   sector: string;
   passive: string;
   tags: string[];
-  stats: {
-    capital: number;
-    innovation: number;
-    influence: number;
-    trust: number;
-    marketShare: number;
-    resilience: number;
-    execution: number;
-  };
+  stats: CompanyStats;
 }
