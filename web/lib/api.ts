@@ -1,5 +1,5 @@
 import { createClient } from "./client";
-import { BASE_URL } from "@/config";
+import { BASE_URL } from "@/constants/config";
 
 export async function api<T>(
   endpoint: string,

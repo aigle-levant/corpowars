@@ -12,6 +12,6 @@ export async function registerRoutes(app: FastifyInstance) {
     prefix: "/health",
   });
   app.register(companyRoutes, {
-    prefix: "/company",
+    prefix: "/companies",
   });
 }
