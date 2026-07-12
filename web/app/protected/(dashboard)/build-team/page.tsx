@@ -34,7 +34,10 @@ export default function TeamBuilderPage() {
     return <div>Failed to load data.</div>;
   }
 
-  const availableCompanies = filterAvailableCompanies(companies, builder.team);
+  const availableCompanies = filterAvailableCompanies(
+    companies,
+    builder.team,
+  );
 
   return (
     <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
@@ -42,6 +45,7 @@ export default function TeamBuilderPage() {
         team={builder.team}
         selectedSlot={builder.selectedSlot}
         onSelectSlot={builder.selectSlot}
+        onClearSlot={builder.clearSlot}
       />
 
       {builder.step === "company" && (
@@ -52,10 +56,15 @@ export default function TeamBuilderPage() {
       )}
 
       {builder.step === "items" && (
-        <ItemPicker items={items} onSelect={builder.selectItem} />
+        <ItemPicker
+          items={items}
+          onSelect={builder.selectItem}
+        />
       )}
 
-      {builder.step === "review" && <Review team={builder.team} />}
+      {builder.step === "review" && (
+        <Review team={builder.team} />
+      )}
     </div>
   );
 }
