@@ -1,14 +1,13 @@
-
-// imports
 import type { FastifyReply, FastifyRequest } from "fastify";
-import { getProfile, updateProfile } from "../services/services.player.js";
+
+import * as PlayerService from "../services/services.player.js";
 import { requireUser } from "../utils/requireUser.js";
 
-export async function getPlayer(request: FastifyRequest, reply: FastifyReply) {
+export async function get(request: FastifyRequest, reply: FastifyReply) {
   try {
     const user = requireUser(request);
 
-    const profile = await getProfile(user.id);
+    const profile = await PlayerService.getProfile(user.id);
 
     return reply.code(200).send(profile);
   } catch (error) {
@@ -20,14 +19,14 @@ export async function getPlayer(request: FastifyRequest, reply: FastifyReply) {
   }
 }
 
-export async function updatePlayer(
+export async function update(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
     const user = requireUser(request);
 
-    const profile = await updateProfile(
+    const profile = await PlayerService.updateProfile(
       user.id,
       request.body as {
         username?: string;

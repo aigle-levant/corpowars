@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { healthRoutes } from "./routes.health.js";
 import { companyRoutes } from "./routes.companies.js";
+import { itemRoutes } from "./routes.items.js";
 
 /**
  * Register all application routes with the Fastify instance.
@@ -13,5 +14,8 @@ export async function registerRoutes(app: FastifyInstance) {
   });
   app.register(companyRoutes, {
     prefix: "/companies",
+  });
+  app.register(itemRoutes, {
+    prefix: "/items",
   });
 }

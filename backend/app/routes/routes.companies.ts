@@ -1,15 +1,11 @@
 import type { FastifyInstance } from "fastify";
 
-import {
-  getAllCompanies,
-  getCompanyById,
-  searchCompanies,
-} from "../controllers/controller.companies.js";
+import * as CompanyController from "../controllers/controller.companies.js";
 
 export async function companyRoutes(app: FastifyInstance) {
-  app.get("/", getAllCompanies);
+  app.get("/", CompanyController.getAll);
 
-  app.get("/search", searchCompanies);
+  app.get("/search", CompanyController.search);
 
-  app.get("/:id", getCompanyById);
+  app.get("/:id", CompanyController.getById);
 }

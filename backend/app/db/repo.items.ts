@@ -1,10 +1,8 @@
-
-
 import { supabase } from "./supabase.client.js";
 
 export async function findAll() {
   const { data, error } = await supabase
-    .from("companies")
+    .from("items")
     .select("*")
     .order("name");
 
@@ -17,7 +15,7 @@ export async function findAll() {
 
 export async function findById(id: string) {
   const { data, error } = await supabase
-    .from("companies")
+    .from("items")
     .select("*")
     .eq("id", id)
     .maybeSingle();
@@ -31,9 +29,9 @@ export async function findById(id: string) {
 
 export async function search(query: string) {
   const { data, error } = await supabase
-    .from("companies")
+    .from("items")
     .select("*")
-    .or(`name.ilike.%${query}%,ticker.ilike.%${query}%,sector.ilike.%${query}%`)
+    .or(`name.ilike.%${query}%,category.ilike.%${query}%`)
     .order("name");
 
   if (error) {

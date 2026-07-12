@@ -1,14 +1,14 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
 
-import * as CompanyService from "../services/services.companies.js";
+import * as ItemService from "../services/services.items.js";
 
 export async function getAll(
   _request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const companies = await CompanyService.findAll();
+  const items = await ItemService.findAll();
 
-  return reply.send(companies);
+  return reply.send(items);
 }
 
 export async function getById(
@@ -19,15 +19,15 @@ export async function getById(
   }>,
   reply: FastifyReply,
 ) {
-  const company = await CompanyService.findById(request.params.id);
+  const item = await ItemService.findById(request.params.id);
 
-  if (!company) {
+  if (!item) {
     return reply.status(404).send({
-      error: "Company not found",
+      error: "Item not found",
     });
   }
 
-  return reply.send(company);
+  return reply.send(item);
 }
 
 export async function search(
@@ -38,7 +38,7 @@ export async function search(
   }>,
   reply: FastifyReply,
 ) {
-  const companies = await CompanyService.search(request.query.q ?? "");
+  const items = await ItemService.search(request.query.q ?? "");
 
-  return reply.send(companies);
+  return reply.send(items);
 }

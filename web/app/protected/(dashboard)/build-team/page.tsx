@@ -40,7 +40,8 @@ export default function TeamBuilderPage() {
           api<Company[]>("/companies"),
           api<Item[]>("/items"),
         ]);
-
+        console.log("Companies:", companies);
+        console.log("Items:", items);
         setCompanies(companies);
         setItems(items);
       } catch (err) {
