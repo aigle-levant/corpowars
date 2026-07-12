@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans } from "next/font/google";
+import Providers from "./providers";
 import {
   GeistPixelSquare
 } from "geist/font/pixel";
@@ -32,7 +33,9 @@ export default function RootLayout({
         GeistPixelSquare.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

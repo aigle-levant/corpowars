@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/lib/server";
 import SidebarLayout from "@/components/dashboard/sidebar-block";
 
@@ -25,8 +24,6 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
   return (
-      <SidebarLayout>
-          {children}
-      </SidebarLayout>
+      <SidebarLayout>{children}</SidebarLayout>
   );
 }
