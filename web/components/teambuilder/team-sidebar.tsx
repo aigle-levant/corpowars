@@ -1,29 +1,35 @@
 "use client";
 
 import {
-  PencilSimple,
-  Plus,
-  X,
-} from "@phosphor-icons/react";
+  DndContext,
+  PointerSensor,
+  type DragEndEvent,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 import { TEAM_SIZE } from "@/constants/config";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { DraggableTeamSlot } from "./draggable-team-slot";
 
 import type { TeamSlot } from "@/types/team-types";
 
 interface Props {
   team: TeamSlot[];
+
   selectedSlot: number;
 
   onSelectSlot: (slot: number) => void;
+
   onClearSlot: (slot: number) => void;
+
+  onReorder: (from: number, to: number) => void;
 }
 
 export function TeamSidebar({
@@ -31,10 +37,25 @@ export function TeamSidebar({
   selectedSlot,
   onSelectSlot,
   onClearSlot,
+  onReorder,
 }: Props) {
-  const filledSlots = team.filter(
-    (slot) => slot.company,
-  ).length;
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  );
+
+  const filledSlots = team.filter((slot) => slot.company).length;
+
+  function handleDragEnd({ active, over }: DragEndEvent) {
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    onReorder(Number(active.id), Number(over.id));
+  }
 
   return (
     <Card className="h-fit">
@@ -44,69 +65,27 @@ export function TeamSidebar({
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="space-y-3">
-        {team.map((slot, index) => {
-          const isSelected =
-            selectedSlot === index;
-
-          const isEditable =
-            slot.company !== null ||
-            index === filledSlots;
-
-          return (
-            <Button
-              key={index}
-              variant={
-                isSelected
-                  ? "default"
-                  : "outline"
-              }
-              className="group relative h-16 w-full justify-start gap-4"
-              disabled={!isEditable}
-              onClick={() =>
-                onSelectSlot(index)
-              }
-            >
-              {slot.company && (
-                <button
-                  type="button"
-                  className="absolute right-2 top-2 rounded p-1 opacity-0 transition group-hover:opacity-100 hover:bg-destructive/10"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onClearSlot(index);
-                  }}
-                >
-                  <X
-                    size={12}
-                    weight="bold"
-                  />
-                </button>
-              )}
-
-              {slot.company ? (
-                <PencilSimple
-                  weight="duotone"
+      <CardContent>
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+          <SortableContext
+            items={team.map((_, index) => index)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-3">
+              {team.map((slot, index) => (
+                <DraggableTeamSlot
+                  key={index}
+                  index={index}
+                  slot={slot}
+                  selected={selectedSlot === index}
+                  editable={slot.company !== null || index === filledSlots}
+                  onSelect={() => onSelectSlot(index)}
+                  onClear={() => onClearSlot(index)}
                 />
-              ) : (
-                <Plus weight="bold" />
-              )}
-
-              <div className="flex flex-col items-start text-left">
-                <span className="font-medium">
-                  {slot.company?.name ??
-                    `Company ${index + 1}`}
-                </span>
-
-                <span className="text-xs text-muted-foreground">
-                  {slot.item?.name ??
-                    (slot.company
-                      ? "Choose Item"
-                      : "Empty Slot")}
-                </span>
-              </div>
-            </Button>
-          );
-        })}
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       </CardContent>
     </Card>
   );

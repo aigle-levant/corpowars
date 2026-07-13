@@ -1,3 +1,11 @@
+/*
+what does this do: this is a generic HTTP helper.
+
+Use it like this [example]:
+return api<Company[]>("/companies");
+*/
+
+// imports
 import { createClient } from "./client";
 import { BASE_URL } from "@/constants/config";
 

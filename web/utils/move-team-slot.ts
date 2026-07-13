@@ -5,11 +5,15 @@ export function moveTeamSlot(
   from: number,
   to: number,
 ): TeamSlot[] {
+  if (from === to) {
+    return team;
+  }
+
   const next = [...team];
 
-  const [slot] = next.splice(from, 1);
+  const [moved] = next.splice(from, 1);
 
-  next.splice(to, 0, slot);
+  next.splice(to, 0, moved);
 
   return next;
 }
