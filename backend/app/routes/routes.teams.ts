@@ -1,23 +1,35 @@
-import type { FastifyReply, FastifyRequest, FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
+
 import * as TeamsService from "../services/services.teams.js";
+
 import { authMiddleware } from "../middleware/auth.js";
+
+import type { SaveTeamInput } from "../types/teams.types.js";
+
+interface TeamParams {
+  id: string;
+}
 
 export async function teamRoutes(app: FastifyInstance) {
   app.addHook("preHandler", authMiddleware);
 
+  /**
+   * Get all teams belonging to the authenticated user.
+   */
   app.get("/", async (request, reply) => {
     const teams = await TeamsService.findAll(request.user!.id);
 
     return reply.send(teams);
   });
 
+  /**
+   * Get a single team.
+   */
   app.get(
     "/:id",
     async (
       request: FastifyRequest<{
-        Params: {
-          id: string;
-        };
+        Params: TeamParams;
       }>,
       reply,
     ) => {
@@ -36,33 +48,39 @@ export async function teamRoutes(app: FastifyInstance) {
     },
   );
 
-  app.post("/", async (request, reply) => {
-    const team = await TeamsService.create(
-      request.user!.id,
-      request.body as {
-        name: string;
-      },
-    );
+  /**
+   * Create a new team.
+   */
+  app.post(
+    "/",
+    async (
+      request: FastifyRequest<{
+        Body: SaveTeamInput;
+      }>,
+      reply,
+    ) => {
+      const team = await TeamsService.create(request.user!.id, request.body);
 
-    return reply.status(201).send(team);
-  });
+      return reply.status(201).send(team);
+    },
+  );
 
+  /**
+   * Update an existing team.
+   */
   app.patch(
     "/:id",
     async (
       request: FastifyRequest<{
-        Params: {
-          id: string;
-        };
+        Params: TeamParams;
+        Body: SaveTeamInput;
       }>,
       reply,
     ) => {
       const team = await TeamsService.update(
         request.user!.id,
         request.params.id,
-        request.body as {
-          name?: string;
-        },
+        request.body,
       );
 
       if (!team) {
@@ -75,13 +93,14 @@ export async function teamRoutes(app: FastifyInstance) {
     },
   );
 
+  /**
+   * Delete a team.
+   */
   app.delete(
     "/:id",
     async (
       request: FastifyRequest<{
-        Params: {
-          id: string;
-        };
+        Params: TeamParams;
       }>,
       reply,
     ) => {

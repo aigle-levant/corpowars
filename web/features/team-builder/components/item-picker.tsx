@@ -1,16 +1,9 @@
-"use client";
-
-import { Item } from "@/types/item-types";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-interface Props {
-  items: Item[];
-  onSelect(item: Item): void;
-}
+import { ItemsPickerProps } from "../types/props";
 
-export function ItemPicker({ items, onSelect }: Props) {
+export function ItemPicker({ items, onSelect }: ItemsPickerProps) {
   return (
     <Card>
       <CardHeader>

@@ -1,13 +1,17 @@
-import type { Company } from "./company-types";
-import type { Item } from "./item-types";
-
-export interface TeamSlot {
-  company: Company | null;
-  item: Item | null;
-}
-
 export interface Team {
   id: string;
   name: string;
-  slots: TeamSlot[];
+  created_at: string;
+  updated_at: string;
+  members: {
+    position: number;
+    company: {
+      id: string;
+      name: string;
+    };
+    item: {
+      id: string;
+      name: string;
+    } | null;
+  }[];
 }

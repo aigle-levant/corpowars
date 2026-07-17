@@ -1,16 +1,9 @@
-"use client";
-
-import { Company } from "@/types/company-types";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-interface Props {
-  companies: Company[];
-  onSelect(company: Company): void;
-}
+import { CompanyPickerProps } from "../types/props";
 
-export function CompanyPicker({ companies, onSelect }: Props) {
+export function CompanyPicker({ companies, onSelect }: CompanyPickerProps) {
   return (
     <Card>
       <CardHeader>

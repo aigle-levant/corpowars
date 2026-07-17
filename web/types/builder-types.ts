@@ -1,4 +1,4 @@
-import type { TeamSlot } from "./team-types";
+import type { TeamSlot } from "@/features/team-builder/types/teams";
 
 export type BuilderStep = "company" | "items" | "review";
 

@@ -1,19 +1,31 @@
 // imports
 import { supabase } from "./supabase.client.js";
 
+// types
+export interface TeamMemberInput {
+  position: number;
+  companyId: string;
+  itemId: string | null;
+}
+
+export interface SaveTeamInput {
+  name: string;
+  members: TeamMemberInput[];
+}
+
 /**
  * Retrieve all teams belonging to a player.
  *
- * @param ownerId - Authenticated player's id.
- * @returns List of teams.
- * @throws If the Supabase query returns an error.
+ * Returns lightweight team summaries for the team list.
  */
 export async function findAll(ownerId: string) {
   const { data, error } = await supabase
     .from("teams")
-    .select("*")
+    .select("id, name, updated_at")
     .eq("owner_id", ownerId)
-    .order("updated_at", { ascending: false });
+    .order("updated_at", {
+      ascending: false,
+    });
 
   if (error) {
     throw error;
@@ -23,17 +35,28 @@ export async function findAll(ownerId: string) {
 }
 
 /**
- * Retrieve a team by its id.
- *
- * @param ownerId - Authenticated player's id.
- * @param teamId - Team id.
- * @returns Team record.
- * @throws If the Supabase query returns an error.
+ * Retrieve a team together with all of its members,
+ * companies and equipped items.
  */
 export async function findById(ownerId: string, teamId: string) {
   const { data, error } = await supabase
     .from("teams")
-    .select("*")
+    .select(
+      `
+      id,
+      name,
+      created_at,
+      updated_at,
+
+      members:team_members(
+        position,
+
+        company:companies(*),
+
+        item:items(*)
+      )
+    `,
+    )
     .eq("owner_id", ownerId)
     .eq("id", teamId)
     .single();
@@ -46,24 +69,14 @@ export async function findById(ownerId: string, teamId: string) {
 }
 
 /**
- * Create a new team.
- *
- * @param ownerId - Authenticated player's id.
- * @param values - Team fields.
- * @returns Newly created team.
- * @throws If the Supabase query returns an error.
+ * Create a new team together with its members.
  */
-export async function create(
-  ownerId: string,
-  values: {
-    name: string;
-  },
-) {
-  const { data, error } = await supabase
+export async function create(ownerId: string, values: SaveTeamInput) {
+  const { data: team, error } = await supabase
     .from("teams")
     .insert({
       owner_id: ownerId,
-      ...values,
+      name: values.name,
     })
     .select()
     .single();
@@ -72,49 +85,84 @@ export async function create(
     throw error;
   }
 
-  return data;
+  if (values.members.length > 0) {
+    const { error: membersError } = await supabase.from("team_members").insert(
+      values.members.map((member) => ({
+        team_id: team.id,
+
+        position: member.position,
+
+        company_id: member.companyId,
+
+        item_id: member.itemId,
+      })),
+    );
+
+    if (membersError) {
+      throw membersError;
+    }
+  }
+
+  return findById(ownerId, team.id);
 }
 
 /**
  * Update an existing team.
- *
- * @param ownerId - Authenticated player's id.
- * @param teamId - Team id.
- * @param values - Fields to update.
- * @returns Updated team.
- * @throws If the Supabase query returns an error.
  */
 export async function updateById(
   ownerId: string,
   teamId: string,
-  values: {
-    name?: string;
-  },
+  values: SaveTeamInput,
 ) {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("teams")
     .update({
-      ...values,
+      name: values.name,
+
       updated_at: new Date().toISOString(),
     })
     .eq("owner_id", ownerId)
-    .eq("id", teamId)
-    .select()
-    .single();
+    .eq("id", teamId);
 
   if (error) {
     throw error;
   }
 
-  return data;
+  const { error: deleteError } = await supabase
+    .from("team_members")
+    .delete()
+    .eq("team_id", teamId);
+
+  if (deleteError) {
+    throw deleteError;
+  }
+
+  if (values.members.length > 0) {
+    const { error: insertError } = await supabase.from("team_members").insert(
+      values.members.map((member) => ({
+        team_id: teamId,
+
+        position: member.position,
+
+        company_id: member.companyId,
+
+        item_id: member.itemId,
+      })),
+    );
+
+    if (insertError) {
+      throw insertError;
+    }
+  }
+
+  return findById(ownerId, teamId);
 }
 
 /**
  * Delete a team.
  *
- * @param ownerId - Authenticated player's id.
- * @param teamId - Team id.
- * @throws If the Supabase query returns an error.
+ * team_members are removed automatically via
+ * ON DELETE CASCADE.
  */
 export async function deleteById(ownerId: string, teamId: string) {
   const { error } = await supabase

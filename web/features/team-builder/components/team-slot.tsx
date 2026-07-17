@@ -1,27 +1,17 @@
 "use client";
 
-import { PencilSimple, Plus, X, DotsSixVertical } from "@phosphor-icons/react";
+import {
+  PencilSimpleIcon,
+  PlusIcon,
+  XIcon,
+  DotsSixVerticalIcon,
+} from "@phosphor-icons/react";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 import { Button } from "@/components/ui/button";
-
-import type { TeamSlot } from "@/types/team-types";
-
-interface Props {
-  index: number;
-
-  slot: TeamSlot;
-
-  selected: boolean;
-
-  editable: boolean;
-
-  onSelect(): void;
-
-  onClear(): void;
-}
+import { TeamSlotProps } from "../types/props";
 
 export function DraggableTeamSlot({
   index,
@@ -30,14 +20,13 @@ export function DraggableTeamSlot({
   editable,
   onSelect,
   onClear,
-}: Props) {
+}: TeamSlotProps) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging,
   } = useSortable({
     id: index,
   });
@@ -61,13 +50,13 @@ export function DraggableTeamSlot({
         {...listeners}
         className="cursor-grab active:cursor-grabbing"
       >
-        <DotsSixVertical />
+        <DotsSixVerticalIcon />
       </div>
 
       {slot.company ? (
-        <PencilSimple weight="duotone" />
+        <PencilSimpleIcon weight="duotone" />
       ) : (
-        <Plus weight="bold" />
+        <PlusIcon weight="bold" />
       )}
 
       <div className="flex flex-col items-start">
@@ -87,7 +76,7 @@ export function DraggableTeamSlot({
             onClear();
           }}
         >
-          <X size={12} />
+          <XIcon size={12} />
         </button>
       )}
     </Button>

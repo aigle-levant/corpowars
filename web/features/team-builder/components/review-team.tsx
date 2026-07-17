@@ -1,14 +1,9 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { TeamSlot } from "@/types/team-types";
 
-interface Props {
-  team: TeamSlot[];
-}
+import type { ReviewProps } from "../types/props";
 
-export function Review({ team }: Props) {
+export function Review({ team }: ReviewProps) {
   return (
     <Card>
       <CardHeader>
@@ -22,9 +17,13 @@ export function Review({ team }: Props) {
             className="flex items-center justify-between rounded-md border p-4"
           >
             <div>
-              <p className="font-semibold">{slot.company?.name}</p>
+              <p className="font-semibold">
+                {slot.company?.name ?? `Company ${index + 1}`}
+              </p>
 
-              <p className="text-sm text-muted-foreground">{slot.item?.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {slot.item?.name ?? "No item"}
+              </p>
             </div>
           </div>
         ))}
