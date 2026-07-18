@@ -1,5 +1,0 @@
-/*
-use economic conditions to determine whether its a bull or bear market.
-economy changes every fortnight.
-certain sectors and passives are boosted.
-*/

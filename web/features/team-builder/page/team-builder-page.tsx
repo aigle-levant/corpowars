@@ -36,7 +36,6 @@ export function TeamBuilder({ onSave, onCancel }: TeamBuilderProps) {
           itemId: slot.item?.id ?? null,
         })),
     });
-
     onSave();
   }
 
