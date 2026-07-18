@@ -1,5 +1,3 @@
-
-
 import { supabase } from "./supabase.client.js";
 
 export async function findAll() {
@@ -41,4 +39,38 @@ export async function search(query: string) {
   }
 
   return data;
+}
+export async function movesFindById(id: string) {
+  const { data, error } = await supabase
+    .from("companies")
+    .select(
+      `
+      *,
+      company_moves (
+        slot,
+        moves (*)
+      )
+    `,
+    )
+    .eq("id", id)
+    .order("slot", {
+      foreignTable: "company_moves",
+      ascending: true,
+    })
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  const { company_moves, ...company } = data;
+
+  return {
+    ...company,
+    moves: company_moves.map((cm: { moves: unknown }) => cm.moves),
+  };
 }
