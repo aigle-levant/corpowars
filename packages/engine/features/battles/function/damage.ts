@@ -22,7 +22,7 @@ export function applyDamage(defender: BattleCompany, damage: number): number {
   return actualDamage;
 }
 
-export function heal(target: BattleCompany, amount: number): number {
+export function applyHeal(target: BattleCompany, amount: number): number {
   const maxCapital = target.company.stats.capital;
 
   const healed = Math.min(amount, maxCapital - target.currentCapital);
